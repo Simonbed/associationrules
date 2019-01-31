@@ -1,3 +1,5 @@
+#### This is a template on how I get the results for the Apriori algorithm.
+
 ##### Association rules. Using apriori packages for association rules algorithm
 import pandas as pd
 from apyori import apriori ### Useful for some of the operations
