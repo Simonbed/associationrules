@@ -1,3 +1,7 @@
+### This was the Rough Draft of this project
+### You should look at the V2 part of this to have a better commented file.
+
+
 import pandas as pd
 
 support_threshold = 0.015
