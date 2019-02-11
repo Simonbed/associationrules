@@ -1,13 +1,13 @@
 import pandas as pd
 
-### With this apriori/mlxtend package, we can extract the support of the different items
+### This is the package I use for the Apriori algorithm. I verified the results and the math seems good
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori
 
 
-### HERE WE PUT THE VALUES WE WANT TO SEE. We put the support and confidence threshold and we ask to arrange by lift if we want to see the end result.
+### Here you put the threshold you want to see. To choose the confidence, 
 support_threshold = 0.015
-confidence_threshold = 0.01
+confidence_threshold = 0.01  ## you can set the support first and see your data to choose the right confidence by removing the "#" on line 28
 value_arranged_by = "lift"  # "confidence" or "lift" strings work well here
 
 
@@ -19,14 +19,13 @@ dt = database2.groupby(["no_transaction"])["item"].apply(list) ## Group the item
 
 
 #### Apriori Algorithm - (Agrawal et Srikantt 1994)
-#### STEP 1 - Fix minimal support and get a list for all mixes of items
+#### STEP 1 - Fix minimal support and get a list for all combinations of items
 te = TransactionEncoder()
 te_data = te.fit(dt).transform(dt)
 te_df = pd.DataFrame(te_data, columns=te.columns_)
 support = apriori(te_df, min_support = support_threshold, use_colnames = True)
 
-#print(support)  #prints out all of the supports we calculated.
-
+#print(support)  
 
 #Prints out the top supports
 resultsupport = support.sort_values(by=["support"], ascending = False) ### WE have the top support at the begining, but they are for single items
@@ -37,11 +36,11 @@ resultsupport['length'] = resultsupport['itemsets'].apply(lambda x: len(x))
 
 ### Now we can take the itemsets (2 or more together) that have high support enough
 resultsupportmin2 = resultsupport[(resultsupport["length"]>=2)]
-#print(resultsupportmin2)  ### This prints out the correct list of items
+#print(resultsupportmin2)  
 
 
-### I don't see the whole data, so we have to reformat PANDAS - This script works wonders for examining data
-### =====This code I found online and did not write it, it has the perk of making print_full(pandasDF) show everything
+### I don't see the whole data, this script helps print out the full dataset
+### =====This code I found online and did not write it. 
 def print_full(x):
     pd.set_option('display.max_rows', len(x))
     pd.set_option('display.max_columns', None)
@@ -57,7 +56,7 @@ def print_full(x):
 ###====
 
 
-## This is the line that uses the confidence we have set at the start
+## his sets our confidence threshold ( we have set the confidence_threshold at the start of the script)
 from mlxtend.frequent_patterns import association_rules
 confidence_support = association_rules(support, metric="confidence", min_threshold=confidence_threshold)
 #print_full(confidence_support)
